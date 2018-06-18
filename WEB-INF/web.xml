@@ -1,13 +1,13 @@
 <?xml version="1.0" ?>
 <web-app>
-	<display-name>Equipment Reservation</display-name>
-	<description>Equipment Reservation App</description>
+	<display-name>Borrow App</display-name>
+	<description>Borrow App</description>
 	<servlet>
-		<servlet-name>AllEquipments</servlet-name>
-		<servlet-class>AllEquipmentssServlet</servlet-class>
+		<servlet-name>AllBorrowAppUsers</servlet-name>
+		<servlet-class>AllBorrowAppUsersServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>AllEquipments</servlet-name>
-		<url-pattern>/equipments</url-pattern>
+		<servlet-name>AllBorrowAppUsers</servlet-name>
+		<url-pattern>/borrowappusers</url-pattern>
 	</servlet-mapping>
 </web-app>
