@@ -17,19 +17,19 @@ public class BorrowAppUsersCollection
 		users = new ArrayList<BorrowAppUsers>();
 	}
 
-	public void addUser(BorrowAppUsers b) {
+	public void addBorrowAppUser(BorrowAppUsers b) {
 		users.add(b);
 	}
 
-	public BorrowAppUsers getUserByIndex(int n) {
+	public BorrowAppUsers getBorrowAppUserByIndex(int n) {
 		return(users.get(n));
 	}
 
-	public ArrayList<BorrowAppUsers> getAllUsers() {
+	public ArrayList<BorrowAppUsers> getAllBorrowAppUsers() {
 		return(users);
 	}
 
-	public int getUsersCount() {
+	public int getBorrowAppUsersCount() {
 		return(users.size());
 	}
 
@@ -37,8 +37,8 @@ public class BorrowAppUsersCollection
 		ArrayList<BorrowAppUsers> bau = new ArrayList<BorrowAppUsers>();
 		BorrowAppUsers b = null;
 		String txt = s.toLowerCase();
-		for(int i=0; i<getUsersCount(); i++) {
-			b = getUserByIndex(i);
+		for(int i=0; i<getBorrowAppUsersCount(); i++) {
+			b = getBorrowAppUserByIndex(i);
 			if(matches(b, txt)) {
 				bau.add(b);
 			}

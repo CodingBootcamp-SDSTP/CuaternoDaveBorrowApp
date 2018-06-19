@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class BorrowAppDatabase
 {
@@ -12,6 +14,8 @@ public class BorrowAppDatabase
 	}
 
 	private BorrowAppUsersCollection buc;
+	private BorrowAppProductsCollection bpc;
+	private BorrowAppTransactionsCollection btc;
 
 	public Connection getDb() {
 		Connection conn = null;
@@ -29,8 +33,18 @@ public class BorrowAppDatabase
 		return(buc);
 	}
 
+	public BorrowAppProductsCollection getBorrowAppProductsCollection() {
+		return(bpc);
+	}
+
+	public BorrowAppTransactionsCollection getBorrowAppTransactionsCollection() {
+		return(btc);
+	}
+
 	private BorrowAppDatabase() {
 		buc = BorrowAppUsersCollection.instance();
+		bpc = BorrowAppProductsCollection.instance();
+		btc = BorrowAppTransactionsCollection.instance();
 		Connection conn = getDb();
 		try {
 			readFromMySQL(conn);
@@ -61,6 +75,34 @@ public class BorrowAppDatabase
 				};
 				createObjectFromMySQL(str);
 			}
+			rs = stmt.executeQuery("SELECT * FROM tblproducts");
+			while(rs.next()) {
+				String[] str = {
+					Integer.toString(rs.getInt("productID")),
+					rs.getString("productname"),
+					rs.getString("productdescription"),
+					rs.getString("productpricerate"),
+					rs.getBigDecimal("productprice").toString(),
+					Integer.toString(rs.getInt("productquantity")),
+					rs.getString("productstatus"),
+					rs.getString("producttag"),
+					rs.getString("owner"),
+					"product"
+				};
+				createObjectFromMySQL(str);
+			}
+			rs = stmt.executeQuery("SELECT * FROM tbltransactions;");
+			while(rs.next()) {
+				String[] str = {
+					rs.getString("transactionID"),
+					rs.getString("quantityofproducts"),
+					rs.getString("prodID"),
+					rs.getString("pickupdate"),
+					rs.getString("returndate"),
+					"transaction"
+				};
+				createObjectFromMySQL(str);
+			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -77,7 +119,15 @@ public class BorrowAppDatabase
 		String d = details[len];
 		if("user".equals(d)) {
 			BorrowAppUsers b = BorrowAppUsers.instance(details[0], details[1], details[2], details[3], Integer.parseInt(details[4]), details[5], details[6], details[7]);
-			buc.addUser(b);
+			buc.addBorrowAppUser(b);
+		}
+		else if("product".equals(d)) {
+			BorrowAppProducts bp = BorrowAppProducts.instance(Integer.parseInt(details[0]), details[1], details[2], details[3], new BigDecimal(details[4]), Integer.parseInt(details[5]), details[6], details[7], details[8]);
+			bpc.addBorrowAppProduct(bp);
+		}
+		else if("transaction".equals(d)) {
+			BorrowAppTransactions bt = new BorrowAppTransactions.BorrowAppTransactionsBuilder().transactionId(Integer.parseInt(details[0])).quantity(Integer.parseInt(details[1])).productId(Integer.parseInt(details[2])).pickUpDate(LocalDate.parse(details[3])).returnDate(LocalDate.parse(details[4])).build();
+			btc.addBorrowAppTransaction(bt);
 		}
 	}
 }

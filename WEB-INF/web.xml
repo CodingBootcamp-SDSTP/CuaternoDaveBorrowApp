@@ -10,4 +10,20 @@
 		<servlet-name>AllBorrowAppUsers</servlet-name>
 		<url-pattern>/borrowappusers</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>AllBorrowAppProducts</servlet-name>
+		<servlet-class>AllBorrowAppProductsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AllBorrowAppProducts</servlet-name>
+		<url-pattern>/borrowappproducts</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>AllBorrowAppTransactions</servlet-name>
+		<servlet-class>AllBorrowAppTransactionsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AllBorrowAppTransactions</servlet-name>
+		<url-pattern>/borrowapptransactions</url-pattern>
+	</servlet-mapping>
 </web-app>

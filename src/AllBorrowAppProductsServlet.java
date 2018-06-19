@@ -1,38 +1,37 @@
-import java.io.*;
 import javax.servlet.*;
-import java.sql.*;
 import javax.servlet.http.*;
+import java.io.*;
 import java.util.ArrayList;
 
-public class AllBorrowAppUsersServlet extends HttpServlet
+public class AllBorrowAppProductsServlet extends HttpServlet
 {
 	BorrowAppDatabase bdb;
-	BorrowAppUsersCollection bc;
-	ArrayList<BorrowAppUsers> users;
+	BorrowAppProductsCollection bpc;
+	ArrayList<BorrowAppProducts> products;
 
 	public void init() throws ServletException {
 		bdb = BorrowAppDatabase.instance();
-		bc = bdb.getBorrowAppUsersCollection();
-		users = bc.getAllBorrowAppUsers();
+		bpc = bdb.getBorrowAppProductsCollection();
+		products = bpc.getAllBorrowAppProducts();
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/xml");
 		PrintWriter out = response.getWriter();
 		StringBuilder sb = new StringBuilder();
-		sb.append("<users>");
-		for(BorrowAppUsers b : users) {
-			sb.append("<user>");
-			sb.append(b.getBorrowAppUsersXML());
-			sb.append("</user>");
+		sb.append("<products>");
+		for(BorrowAppProducts b : products) {
+			sb.append("<product>");
+			sb.append(b.getBorrowAppProductsXML());
+			sb.append("</product>");
 		}
-		sb.append("</users>");
+		sb.append("</products>");
 		out.print(sb.toString());
 	}
 
 	public void destroy() {
 		bdb = null;
-		bc = null;
-		users = null;
+		bpc = null;
+		products = null;
 	}
 }
