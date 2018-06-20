@@ -2,36 +2,14 @@ import java.math.BigDecimal;
 
 public class BorrowAppProducts
 {
-	static BorrowAppProducts _instance = null;
-
-	public static BorrowAppProducts instance(int i, String n, String d, String pr, BigDecimal p, int q, String s, String t, String o) {
-		if(_instance == null) {
-			_instance = new BorrowAppProducts(i, n, d, pr, p, q, s, t, o);
-		}
-		return(_instance);
-	}
-
 	private int id;
 	private String name;
 	private String desc;
-	private String pricerate;
 	private BigDecimal price;
 	private int quantity;
 	private String status;
 	private String tag;
 	private String owner;
-
-	private BorrowAppProducts(int i, String n, String d, String pr, BigDecimal p, int q, String s, String t, String o) {
-		id = i;
-		name = n;
-		desc = d;
-		pricerate = pr;
-		price = p;
-		quantity = q;
-		status = s;
-		tag = t;
-		owner = o;
-	}
 
 	public void setId(int i) {
 		id = i;
@@ -55,14 +33,6 @@ public class BorrowAppProducts
 
 	public String getDesc() {
 		return(desc);
-	}
-
-	public void setPriceRate(String p) {
-		pricerate = p;
-	}
-
-	public String getPriceRate() {
-		return(pricerate);
 	}
 
 	public void setPrice(BigDecimal p) {
@@ -110,7 +80,6 @@ public class BorrowAppProducts
 		sb.append("<id>" + getId() + "</id>");
 		sb.append("<name>" + getName() + "</name>");
 		sb.append("<description>" + getDesc() + "</description>");
-		sb.append("<pricerate>" + getPriceRate() + "</pricerate>");
 		sb.append("<price>" + getPrice() + "</price>");
 		sb.append("<quantity>" + getQuantity() + "</quantity>");
 		sb.append("<status>" + getStatus() + "</status>");

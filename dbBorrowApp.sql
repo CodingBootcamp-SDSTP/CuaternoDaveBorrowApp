@@ -6,10 +6,8 @@ CREATE TABLE tblproducts ( productID INTEGER NOT NULL PRIMARY KEY, productname V
 
 INSERT INTO tblproducts ( productID, productname, productdescription, productpricerate, productprice, productquantity, productstatus, producttag, owner ) VALUES ( 1, 'Product 1', 'First product test', 'Per Hour', 100.00, 3, 'Available', 'test', 'LeggoDave' );
 
-CREATE TABLE tbltransactions ( transactionID INTEGER PRIMARY KEY, transactiondate DATETIME DEFAULT CURRENT_TIMESTAMP, quantityofproducts INTEGER NOT NULL, prodID INTEGER, pickupdate DATE NOT NULL, returndate DATE NOT NULL, FOREIGN KEY (prodID) REFERENCES tblproducts(productID) );
+CREATE TABLE tbltransactions ( transactionID INTEGER PRIMARY KEY, transactiondate DATETIME DEFAULT CURRENT_TIMESTAMP, username VARCHAR(20) NOT NULL, prodID INTEGER NOT NULL, pickupdate DATE NOT NULL, returndate DATE NOT NULL, hoursofusage INTEGER NOT NULL, FOREIGN KEY (prodID) REFERENCES tblproducts(productID), FOREIGN KEY (username) REFERENCES tblusers(username) );
 
-INSERT INTO tbltransactions ( transactionID, quantityofproducts, prodID, pickupdate, returndate ) VALUES ( 4019, 2, 1, '2018/06/19', '2018/06/20' ) ;
+INSERT INTO tbltransactions ( transactionID, quantityofproducts, prodID, pickupdate, returndate ) VALUES ( 4019, 2, 1, '2018/06/19', '2018/06/20', 24 ) ;
 
-CREATE TABLE tbluserratings ( ratingID INTEGER NOT NULL PRIMARY KEY, rating INTEGER NOT NULL, review VARCHAR(50), userID VARCHAR(20), userratedate DATETIME DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (userID) REFERENCES tblusers (username) );
-
-CREATE TABLE tblproductsrating ( ratingID INTEGER NOT NULL PRIMARY KEY, rating INTEGER NOT NULL, review VARCHAR(50), prodID INTEGER, productratedate DATETIME DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (prodID) REFERENCES tblproducts (productID) );
+CREATE TABLE tblratings ( ratingID INTEGER NOT NULL PRIMARY KEY, rating INTEGER NOT NULL, review VARCHAR(50), evaluatorID VARCHAR(20) NOT NULL, ratingtype VARCHAR(20) NOT NULL, evaluatedprodID INTEGER, evaluateduserID VARCHAR(20), vote INTEGER, productratedate DATETIME DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (evaluatedprodID) REFERENCES tblproducts (productID), FOREIGN KEY (evaluatorID) REFERENCES tblusers (username), FOREIGN KEY (evaluateduserID) REFERENCES tblusers (username) );

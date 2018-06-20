@@ -49,14 +49,13 @@ public class BorrowAppProductsCollection
 		boolean result = false;
 		String id = Integer.toString(p.getId()).toLowerCase();
 		String name = p.getName().toLowerCase();
-		String rate = p.getPriceRate().toLowerCase();
 		String price = p.getPrice().toString().toLowerCase();
 		String quantity = Integer.toString(p.getQuantity()).toLowerCase();
 		String status = p.getStatus().toLowerCase();
 		String tag = p.getTag().toLowerCase();
 		String owner = p.getOwner().toLowerCase();
 		String txt = s.toLowerCase();
-		if(id.contains(txt) || name.contains(txt) || rate.contains(txt) || price.contains(txt) || quantity.contains(txt) || status.contains(txt) || tag.contains(txt) || owner.contains(txt)) {
+		if(id.contains(txt) || name.contains(txt) || price.contains(txt) || quantity.contains(txt) || status.contains(txt) || tag.contains(txt) || owner.contains(txt)) {
 			result = true;
 		}
 		return(result);

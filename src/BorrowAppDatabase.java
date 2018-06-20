@@ -16,6 +16,7 @@ public class BorrowAppDatabase
 	private BorrowAppUsersCollection buc;
 	private BorrowAppProductsCollection bpc;
 	private BorrowAppTransactionsCollection btc;
+	private BorrowAppRatingsCollection brc;
 
 	public Connection getDb() {
 		Connection conn = null;
@@ -41,10 +42,15 @@ public class BorrowAppDatabase
 		return(btc);
 	}
 
+	public BorrowAppRatingsCollection getBorrowAppRatingsCollection() {
+		return(brc);
+	}
+
 	private BorrowAppDatabase() {
 		buc = BorrowAppUsersCollection.instance();
 		bpc = BorrowAppProductsCollection.instance();
 		btc = BorrowAppTransactionsCollection.instance();
+		brc = BorrowAppRatingsCollection.instance();
 		Connection conn = getDb();
 		try {
 			readFromMySQL(conn);
@@ -103,6 +109,21 @@ public class BorrowAppDatabase
 				};
 				createObjectFromMySQL(str);
 			}
+			rs = stmt.executeQuery("SELECT * FROM tblratings");
+			while(rs.next()) {
+				String[] str = {
+					rs.getString("ratingtype"),
+					Integer.toString(rs.getInt("ratingID")),
+					Integer.toString(rs.getInt("rating")),
+					rs.getString("review"),
+					rs.getString("evaluatorID"),
+					Integer.toString(rs.getInt("evaluatedprodID")),
+					rs.getString("evaluateduserID"),
+					Integer.toString(rs.getInt("vote")),
+					"rating"
+				};
+				createObjectFromMySQL(str);
+			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -117,17 +138,39 @@ public class BorrowAppDatabase
 	public void createObjectFromMySQL(String... details) {
 		int len = details.length-1;
 		String d = details[len];
-		if("user".equals(d)) {
-			BorrowAppUsers b = BorrowAppUsers.instance(details[0], details[1], details[2], details[3], Integer.parseInt(details[4]), details[5], details[6], details[7]);
-			buc.addBorrowAppUser(b);
-		}
-		else if("product".equals(d)) {
-			BorrowAppProducts bp = BorrowAppProducts.instance(Integer.parseInt(details[0]), details[1], details[2], details[3], new BigDecimal(details[4]), Integer.parseInt(details[5]), details[6], details[7], details[8]);
-			bpc.addBorrowAppProduct(bp);
-		}
-		else if("transaction".equals(d)) {
-			BorrowAppTransactions bt = new BorrowAppTransactions.BorrowAppTransactionsBuilder().transactionId(Integer.parseInt(details[0])).quantity(Integer.parseInt(details[1])).productId(Integer.parseInt(details[2])).pickUpDate(LocalDate.parse(details[3])).returnDate(LocalDate.parse(details[4])).build();
-			btc.addBorrowAppTransaction(bt);
+		switch(d) {
+			case "user": {
+				BorrowAppUsers b = new BorrowAppUsers.BorrowAppUsersBuilder().username(details[0]).password(details[1]).firstName(details[2]).lastName(details[3]).age(Integer.parseInt(details[4])).contact(details[5]).email(details[6]).role(details[7]).build();
+				buc.addBorrowAppUser(b);
+				break;
+			}
+			case "product": {
+				if("per hour".equalsIgnoreCase(details[3])) {
+					ProductRatePerHour prh = ProductRatePerHour.instance(Integer.parseInt(details[0]), details[1], details[2], details[3], new BigDecimal(details[4]), Integer.parseInt(details[5]), details[6], details[7], details[8]);
+					bpc.addBorrowAppProduct(prh);
+				}
+				else if("per day".equalsIgnoreCase(details[3])) {
+					ProductRatePerDay prd = ProductRatePerDay.instance(Integer.parseInt(details[0]), details[1], details[2], details[3], new BigDecimal(details[4]), Integer.parseInt(details[5]), details[6], details[7], details[8]);
+					bpc.addBorrowAppProduct(prd);
+				}
+				break;
+			}
+			case "transaction": {
+				BorrowAppTransactions bt = new BorrowAppTransactions.BorrowAppTransactionsBuilder().transactionId(Integer.parseInt(details[0])).quantity(Integer.parseInt(details[1])).productId(Integer.parseInt(details[2])).pickUpDate(LocalDate.parse(details[3])).returnDate(LocalDate.parse(details[4])).build();
+				btc.addBorrowAppTransaction(bt);
+				break;
+			}
+			case "rating": {
+				if("product".equalsIgnoreCase(details[0])) {
+					ProductRatings pr = ProductRatings.instance(Integer.parseInt(details[1]), Integer.parseInt(details[2]), details[3], details[4], details[5], Integer.parseInt(details[7]));
+					brc.addBorrowAppRatings(pr);
+				}
+				else if("user".equalsIgnoreCase(details[0])) {
+					UserRatings ur = UserRatings.instance(Integer.parseInt(details[1]), Integer.parseInt(details[2]), details[3], details[4], details[6], Integer.parseInt(details[7]));
+					brc.addBorrowAppRatings(ur);
+				}
+				break;
+			}
 		}
 	}
 }

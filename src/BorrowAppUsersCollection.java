@@ -48,7 +48,7 @@ public class BorrowAppUsersCollection
 
 	public boolean matches(BorrowAppUsers b, String s) {
 		boolean result = false;
-		String un = b.getUserName().toLowerCase();
+		String un = b.USERNAME.toLowerCase();
 		String txt = s.toLowerCase();
 		if(un.contains(txt)) {
 			result = true;
