@@ -18,15 +18,30 @@ public class AllBorrowAppProductsServlet extends HttpServlet
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/xml");
 		PrintWriter out = response.getWriter();
+
+	}
+
+	public String getAllProductsXML(ArrayList<BorrowAppProducts> products) {
+		StringBuilder sb = new StringBuilder();
+		for(BorrowAppProducts b : products) {
+			if(b instanceof ProductRatePerDay) {
+				ProductRatePerDay p = (ProductRatePerDay)b;
+				sb.append(p.getBorrowAppProductsXML());
+			}
+			else if(b instanceof ProductRatePerHour) {
+				ProductRatePerHour pr = (ProductRatePerHour)b;
+				sb.append(pr.getBorrowAppProductsXML());
+			}
+		}
+		return(sb.toString());
+	}
+
+	public String getAllProducts(ArrayList<BorrowAppProducts> products) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<products>");
-		for(BorrowAppProducts b : products) {
-			sb.append("<product>");
-			sb.append(b.getBorrowAppProductsXML());
-			sb.append("</product>");
-		}
+		sb.append(getAllProductsXML(products));
 		sb.append("</products>");
-		out.print(sb.toString());
+		return(sb.toString());
 	}
 
 	public void destroy() {

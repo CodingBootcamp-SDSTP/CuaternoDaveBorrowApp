@@ -19,11 +19,19 @@
 		<url-pattern>/borrowappproducts</url-pattern>
 	</servlet-mapping>
 	<servlet>
-		<servlet-name>AllBorrowAppTransactions</servlet-name>
-		<servlet-class>AllBorrowAppTransactionsServlet</servlet-class>
+		<servlet-name>AllBorrowAppOrders</servlet-name>
+		<servlet-class>AllBorrowAppOrdersServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>AllBorrowAppTransactions</servlet-name>
-		<url-pattern>/borrowapptransactions</url-pattern>
+		<servlet-name>AllBorrowAppOrders</servlet-name>
+		<url-pattern>/borrowapporders</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>AllBorrowAppRatings</servlet-name>
+		<servlet-class>AllBorrowAppRatingsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AllBorrowAppRatings</servlet-name>
+		<url-pattern>/borrowappratings</url-pattern>
 	</servlet-mapping>
 </web-app>

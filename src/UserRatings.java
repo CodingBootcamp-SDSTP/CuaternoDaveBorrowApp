@@ -1,23 +1,15 @@
 public class UserRatings extends BorrowAppRatings
 {
-	static UserRatings _instance = null;
-
-	public static UserRatings instance(int i, int r, String rvw, String e, String ed, int v) {
-		if(_instance == null) {
-			_instance = new UserRatings(i, r, rvw, e, ed, v);
-		}
-		return(_instance);
-	}
-
 	private String evaluatedUser;
 
-	private UserRatings(int i, int r, String rvw, String e, String ed, int v) {
+	public UserRatings(int i, int r, String rvw, String e, String ed, int v, String t) {
 		setId(i);
 		setRating(r);
 		setReview(rvw);
 		setEvaluator(e);
 		evaluatedUser = ed;
 		setVote(v);
+		setType(t);
 	}
 
 	public void setEvaluatedUser(String e) {
@@ -31,8 +23,10 @@ public class UserRatings extends BorrowAppRatings
 	@Override
 	public String getBorrowAppRatingsXML() {
 		StringBuilder sb = new StringBuilder();
+		sb.append("<userrating>");
 		sb.append(super.getBorrowAppRatingsXML());
 		sb.append("<evaluateduser>" + getEvaluatedUser() + "</evaluateduser>");
+		sb.append("</userrating>");
 		return(sb.toString());
 	}
 }

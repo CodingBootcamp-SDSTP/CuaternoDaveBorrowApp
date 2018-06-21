@@ -5,6 +5,7 @@ public class BorrowAppRatings
 	private String review;
 	private String evaluator;
 	private int vote;
+	private String type;
 
 	public void setId(int i) {
 		id = i;
@@ -46,6 +47,14 @@ public class BorrowAppRatings
 		return(vote);
 	}
 
+	public void setType(String t) {
+		type = t;
+	}
+
+	public String getType() {
+		return(type);
+	}
+
 	public String getBorrowAppRatingsXML() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<ratingid>" + getId() + "</ratingid>");
@@ -53,6 +62,7 @@ public class BorrowAppRatings
 		sb.append("<rating>" + getRating() + "</rating>");
 		sb.append("<review>" + getReview() + "</review>");
 		sb.append("<evaluator>" + getEvaluator() + "</evaluator>");
+		sb.append("<type>" + getType() + "</type>");
 		return(sb.toString());
 	}
 }

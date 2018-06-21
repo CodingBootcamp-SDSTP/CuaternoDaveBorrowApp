@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<title>BorrowApp</title>
+		<script>
+			window.onload = function() {
+				let u = document.getElementById('users');
+				let r = document.getElementById('ratings');
+				let con = document.getElementById('content');
+				u.onclick = function() {
+					let rq = new XMLHttpRequest();
+					rq.onreadystatechange = function() {
+						if(rq.readyState == 4) {
+							con.innerHTML = "";
+							con.innerHTML = rq.responseText;
+						}
+					}
+					rq.open('GET', '/borrowappusers', true);
+					rq.send();
+				};
+				r.onclick = function() {
+					let rq = new XMLHttpRequest();
+					rq.onreadystatechange = function() {
+						if(rq.readyState == 4) {
+							con.innerHTML = "";
+							con.innerHTML = rq.responseText;
+						}
+					}
+					rq.open('GET', '/borrowappratings', true);
+					rq.send();
+				};
+			};
+		</script>
+	</head>
+	<body>
+		<h1>Welcome page for BorrowApp</h1>
+		<p><a href="#" id="users">See all BorrowApp Users</a></p>
+		<p><a href="#" id="ratings">See all BorrowApp ratings</a></p>
+		<div id="content"></div>
+	</body>
+</html>

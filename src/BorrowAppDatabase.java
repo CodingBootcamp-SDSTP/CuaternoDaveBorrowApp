@@ -15,7 +15,7 @@ public class BorrowAppDatabase
 
 	private BorrowAppUsersCollection buc;
 	private BorrowAppProductsCollection bpc;
-	private BorrowAppTransactionsCollection btc;
+	private BorrowAppOrdersCollection boc;
 	private BorrowAppRatingsCollection brc;
 
 	public Connection getDb() {
@@ -38,8 +38,8 @@ public class BorrowAppDatabase
 		return(bpc);
 	}
 
-	public BorrowAppTransactionsCollection getBorrowAppTransactionsCollection() {
-		return(btc);
+	public BorrowAppOrdersCollection getBorrowAppOrdersCollection() {
+		return(boc);
 	}
 
 	public BorrowAppRatingsCollection getBorrowAppRatingsCollection() {
@@ -49,7 +49,7 @@ public class BorrowAppDatabase
 	private BorrowAppDatabase() {
 		buc = BorrowAppUsersCollection.instance();
 		bpc = BorrowAppProductsCollection.instance();
-		btc = BorrowAppTransactionsCollection.instance();
+		boc = BorrowAppOrdersCollection.instance();
 		brc = BorrowAppRatingsCollection.instance();
 		Connection conn = getDb();
 		try {
@@ -97,15 +97,17 @@ public class BorrowAppDatabase
 				};
 				createObjectFromMySQL(str);
 			}
-			rs = stmt.executeQuery("SELECT * FROM tbltransactions;");
+			rs = stmt.executeQuery("SELECT * FROM tblorders;");
 			while(rs.next()) {
 				String[] str = {
-					rs.getString("transactionID"),
-					rs.getString("quantityofproducts"),
+					rs.getString("orderID"),
+					rs.getString("username"),
 					rs.getString("prodID"),
 					rs.getString("pickupdate"),
 					rs.getString("returndate"),
-					"transaction"
+					Integer.toString(rs.getInt("hoursofusage")),
+					Integer.toString(rs.getInt("cartID")),
+					"order"
 				};
 				createObjectFromMySQL(str);
 			}
@@ -120,6 +122,7 @@ public class BorrowAppDatabase
 					Integer.toString(rs.getInt("evaluatedprodID")),
 					rs.getString("evaluateduserID"),
 					Integer.toString(rs.getInt("vote")),
+					rs.getString("ratingtype"),
 					"rating"
 				};
 				createObjectFromMySQL(str);
@@ -146,27 +149,27 @@ public class BorrowAppDatabase
 			}
 			case "product": {
 				if("per hour".equalsIgnoreCase(details[3])) {
-					ProductRatePerHour prh = ProductRatePerHour.instance(Integer.parseInt(details[0]), details[1], details[2], details[3], new BigDecimal(details[4]), Integer.parseInt(details[5]), details[6], details[7], details[8]);
+					ProductRatePerHour prh = new ProductRatePerHour(Integer.parseInt(details[0]), details[1], details[2], details[3], new BigDecimal(details[4]), Integer.parseInt(details[5]), details[6], details[7], details[8]);
 					bpc.addBorrowAppProduct(prh);
 				}
 				else if("per day".equalsIgnoreCase(details[3])) {
-					ProductRatePerDay prd = ProductRatePerDay.instance(Integer.parseInt(details[0]), details[1], details[2], details[3], new BigDecimal(details[4]), Integer.parseInt(details[5]), details[6], details[7], details[8]);
+					ProductRatePerDay prd = new ProductRatePerDay(Integer.parseInt(details[0]), details[1], details[2], details[3], new BigDecimal(details[4]), Integer.parseInt(details[5]), details[6], details[7], details[8]);
 					bpc.addBorrowAppProduct(prd);
 				}
 				break;
 			}
-			case "transaction": {
-				BorrowAppTransactions bt = new BorrowAppTransactions.BorrowAppTransactionsBuilder().transactionId(Integer.parseInt(details[0])).quantity(Integer.parseInt(details[1])).productId(Integer.parseInt(details[2])).pickUpDate(LocalDate.parse(details[3])).returnDate(LocalDate.parse(details[4])).build();
-				btc.addBorrowAppTransaction(bt);
+			case "order": {
+				BorrowAppOrders bt = new BorrowAppOrders.BorrowAppOrdersBuilder().orderId(Integer.parseInt(details[0])).username(details[1]).productId(Integer.parseInt(details[2])).pickUpDate(LocalDate.parse(details[3])).returnDate(LocalDate.parse(details[4])).hoursOfUsage(Integer.parseInt(details[5])).cartId(Integer.parseInt(details[6])).build();
+				boc.addBorrowAppOrder(bt);
 				break;
 			}
 			case "rating": {
 				if("product".equalsIgnoreCase(details[0])) {
-					ProductRatings pr = ProductRatings.instance(Integer.parseInt(details[1]), Integer.parseInt(details[2]), details[3], details[4], details[5], Integer.parseInt(details[7]));
+					ProductRatings pr = new ProductRatings(Integer.parseInt(details[1]), Integer.parseInt(details[2]), details[3], details[4], details[5], Integer.parseInt(details[7]), details[8]);
 					brc.addBorrowAppRatings(pr);
 				}
 				else if("user".equalsIgnoreCase(details[0])) {
-					UserRatings ur = UserRatings.instance(Integer.parseInt(details[1]), Integer.parseInt(details[2]), details[3], details[4], details[6], Integer.parseInt(details[7]));
+					UserRatings ur = new UserRatings(Integer.parseInt(details[1]), Integer.parseInt(details[2]), details[3], details[4], details[6], Integer.parseInt(details[7]), details[8]);
 					brc.addBorrowAppRatings(ur);
 				}
 				break;

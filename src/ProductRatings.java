@@ -1,23 +1,15 @@
 public class ProductRatings extends BorrowAppRatings
 {
-	static ProductRatings _instance = null;
-
-	public static ProductRatings instance(int i, int r, String rvw, String e, String ed, int v) {
-		if(_instance == null) {
-			_instance = new ProductRatings(i, r, rvw, e, ed, v);
-		}
-		return(_instance);
-	}
-
 	private String evaluatedProduct;
 
-	private ProductRatings(int i, int r, String rvw, String e, String ed, int v) {
+	public ProductRatings(int i, int r, String rvw, String e, String ed, int v, String t) {
 		setId(i);
 		setRating(r);
 		setReview(rvw);
 		setEvaluator(e);
 		evaluatedProduct = ed;
 		setVote(v);
+		setType(t);
 	}
 
 	public void setEvaluatedProduct(String e) {
@@ -31,8 +23,10 @@ public class ProductRatings extends BorrowAppRatings
 	@Override
 	public String getBorrowAppRatingsXML() {
 		StringBuilder sb = new StringBuilder();
+		sb.append("<productrating>");
 		sb.append(super.getBorrowAppRatingsXML());
 		sb.append("<evaluatedproduct>" + getEvaluatedProduct() + "</evaluatedproduct>");
+		sb.append("</productrating>");
 		return(sb.toString());
 	}
 }

@@ -49,8 +49,9 @@ public class BorrowAppRatingsCollection
 		boolean result = false;
 		String rating = Integer.toString(b.getRating()).toLowerCase();
 		String evaluator = b.getEvaluator().toLowerCase();
+		String type = b.getType().toLowerCase();
 		String txt = t.toLowerCase();
-		if(rating.equals(txt) || evaluator.equals(txt)) {
+		if(rating.equals(txt) || evaluator.equals(txt) || type.contains(txt)) {
 			result = true;
 		}
 		return(result);
